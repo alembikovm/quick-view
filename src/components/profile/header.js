@@ -60,7 +60,7 @@ export default function Header({
           <Skeleton circle height={150} width={150} count={1} />
         )}
       </div>
-      <div className="flex items-center justify-center flex-col min-sm:col-span-3">
+      <div className="flex items-center justify-center flex-col col-span-3 md:col-span-2">
         <div className="container flex items-center">
           <p className="text-2xl mr-4">{profileUsername}</p>
           {activeBtnFollow && isFollowingProfile === null ? (

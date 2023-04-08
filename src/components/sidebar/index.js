@@ -9,7 +9,7 @@ export default function Sidebar() {
   );
 
   return (
-    <div className="p-4">
+    <div className="p-4 container col-span-3 md:col-span-1">
       <User username={username} fullName={fullName} />
       <Suggestions userId={userId} following={following} loggedInUserDocId={docId} />
     </div>
