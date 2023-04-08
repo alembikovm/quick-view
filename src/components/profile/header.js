@@ -17,8 +17,8 @@ export default function Header({
     fullName,
     followers,
     following,
-    username: profileUsername
-  }
+    username: profileUsername,
+  },
 }) {
   const { user: loggedInUser } = useContext(UserContext);
   const { user } = useUser(loggedInUser?.uid);
@@ -28,14 +28,23 @@ export default function Header({
   const handleToggleFollow = async () => {
     setIsFollowingProfile((isFollowingProfile) => !isFollowingProfile);
     setFollowerCount({
-      followerCount: isFollowingProfile ? followerCount - 1 : followerCount + 1
+      followerCount: isFollowingProfile ? followerCount - 1 : followerCount + 1,
     });
-    await toggleFollow(isFollowingProfile, user.docId, profileDocId, profileUserId, user.userId);
+    await toggleFollow(
+      isFollowingProfile,
+      user.docId,
+      profileDocId,
+      profileUserId,
+      user.userId
+    );
   };
 
   useEffect(() => {
     const isLoggedInUserFollowingProfile = async () => {
-      const isFollowing = await isUserFollowingProfile(user.username, profileUserId);
+      const isFollowing = await isUserFollowingProfile(
+        user.username,
+        profileUserId
+      );
       setIsFollowingProfile(!!isFollowing);
     };
 
@@ -45,8 +54,8 @@ export default function Header({
   }, [user?.username, profileUserId]);
 
   return (
-    <div className="grid grid-cols-3 gap-4 justify-between mx-auto max-w-screen-lg">
-      <div className="container flex justify-center items-center">
+    <div className="flex">
+      <div className="flex items-center" style={{ flexShrink: 0 }}>
         {profileUsername ? (
           <img
             className="rounded-full h-40 w-40 flex"
@@ -60,7 +69,7 @@ export default function Header({
           <Skeleton circle height={150} width={150} count={1} />
         )}
       </div>
-      <div className="flex items-center justify-center flex-col col-span-3 md:col-span-2">
+      <div className="flex items-center justify-center flex-col col-span-3 md:col-span-2 mr-auto pl-20">
         <div className="container flex items-center">
           <p className="text-2xl mr-4">{profileUsername}</p>
           {activeBtnFollow && isFollowingProfile === null ? (
@@ -82,7 +91,7 @@ export default function Header({
             )
           )}
         </div>
-        <div className="container flex mt-4">
+        <div className="container md:flex mt-4">
           {!followers || !following ? (
             <Skeleton count={1} width={677} height={24} />
           ) : (
@@ -102,7 +111,9 @@ export default function Header({
           )}
         </div>
         <div className="container mt-4">
-          <p className="font-medium">{!fullName ? <Skeleton count={1} height={24} /> : fullName}</p>
+          <p className="font-medium">
+            {!fullName ? <Skeleton count={1} height={24} /> : fullName}
+          </p>
         </div>
       </div>
     </div>
@@ -119,6 +130,6 @@ Header.propTypes = {
     fullName: PropTypes.string,
     username: PropTypes.string,
     followers: PropTypes.array,
-    following: PropTypes.array
-  }).isRequired
+    following: PropTypes.array,
+  }).isRequired,
 };
