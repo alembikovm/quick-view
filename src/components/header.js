@@ -19,7 +19,7 @@ export default function Header() {
           <div className="text-gray-700 text-center flex items-center align-items cursor-pointer">
             <h1 className="flex justify-center w-full">
               <Link to={ROUTES.DASHBOARD} aria-label="quick-view logo">
-                <img src="/images/logo.png" alt="quick-view" className="mt-2 w-6/12" />
+                <img src="/images/quick-view-low-resolution-logo-black-on-transparent-background.png" alt="quick-view" className="mt-2 w-4/12 md:w-2/12" />
               </Link>
             </h1>
           </div>
