@@ -16,7 +16,7 @@ export default function Header() {
     <header className="h-16 bg-white border-b border-gray-primary mb-8">
       <div className="container mx-auto max-w-screen-lg h-full">
         <div className="flex justify-between h-full">
-          <div className="text-gray-700 text-center flex items-center align-items cursor-pointer">
+          <div className="text-gray-700 text-center flex items-center align-items cursor-pointer w-3/5">
             <h1 className="flex justify-center w-full">
               <Link to={ROUTES.DASHBOARD} aria-label="quick-view logo">
                 <img src="/images/quick-view-low-resolution-logo-black-on-transparent-background.png" alt="quick-view" className="mt-2 w-4/12 md:w-2/12" />
@@ -73,7 +73,7 @@ export default function Header() {
                   </svg>
                 </button>
                 {user && (
-                  <div className="flex items-center cursor-pointer">
+                  <div className="flex items-center cursor-pointer flex-shrink-0">
                     <Link to={`/p/${user?.username}`}>
                       <img
                         className="rounded-full h-8 w-8 flex"
