@@ -1,18 +1,18 @@
+/* eslint-disable react/button-has-type */
 /* eslint-disable no-nested-ternary */
 import PropTypes from 'prop-types';
-import { useEffect, useRef, useContext } from 'react';
+import { useEffect, useRef } from 'react';
 import Skeleton from 'react-loading-skeleton';
-
-const Sample = () => <div>Hello</div>
+import useModal from '../../hooks/use-modal';
 
 export default function Photos({ photos }) {
-  const inputRef = useRef(null)
+  const inputRef = useRef(null);
+
+  const {isOpen, openModal, closeModal} = useModal();
 
 
   const handleAddPhoto = (event) => {
     console.log(event.target.value);
-
-
   };
 
   useEffect(() => {
@@ -85,6 +85,13 @@ export default function Photos({ photos }) {
       </div>
 
       {!photos || (photos.length === 0 && <p className="text-center text-2xl">No Posts Yet</p>)}
+
+      {isOpen && (
+        <div>
+          <p>This is the modal content</p>
+          <button onClick={closeModal}>Close Modal</button>
+        </div>
+      )}
     </div>
   );
 }
