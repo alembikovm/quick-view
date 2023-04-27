@@ -1,11 +1,44 @@
 /* eslint-disable no-nested-ternary */
 import PropTypes from 'prop-types';
+import { useEffect, useRef, useContext } from 'react';
 import Skeleton from 'react-loading-skeleton';
 
+const Sample = () => <div>Hello</div>
+
 export default function Photos({ photos }) {
+  const inputRef = useRef(null)
+
+
+  const handleAddPhoto = (event) => {
+    console.log(event.target.value);
+
+
+  };
+
+  useEffect(() => {
+    const element = inputRef.current;
+
+    element.addEventListener('change', handleAddPhoto, false);    
+
+    return () => {
+      element.removeEventListener('change', handleAddPhoto, false);
+    }
+  });
+
   return (
     <div className="h-16 border-t border-gray-primary mt-12 pt-4">
       <div className="grid md:grid-cols-3 gap-8 mt-4 mb-12">
+      <div className="relative group">
+        <div className="absolute bottom-0 left-0 bg-gray-200 z-10 w-full justify-evenly items-center h-full bg-black-faded flex">
+          <input ref={inputRef} type="file" />
+
+          <p className="flex items-center text-white font-bold">
+            +
+          </p>
+        </div>
+      </div>
+
+
         {!photos
           ? new Array(12).fill(0).map((_, i) => <Skeleton key={i} width={320} height={400} />)
           : photos.length > 0
