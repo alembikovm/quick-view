@@ -1,9 +1,12 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable react/button-has-type */
 /* eslint-disable no-nested-ternary */
 import PropTypes from 'prop-types';
 import { useEffect, useRef } from 'react';
 import Skeleton from 'react-loading-skeleton';
 import useModal from '../../hooks/use-modal';
+import Modal from '../modal';
 
 export default function Photos({ photos }) {
   const inputRef = useRef(null);
@@ -29,7 +32,7 @@ export default function Photos({ photos }) {
     <div className="h-16 border-t border-gray-primary mt-12 pt-4">
       <div className="grid md:grid-cols-3 gap-8 mt-4 mb-12">
       <div className="relative group">
-        <div className="absolute bottom-0 left-0 bg-gray-200 z-10 w-full justify-evenly items-center h-full bg-black-faded flex">
+        <div onClick={openModal} className="absolute bottom-0 left-0 bg-gray-200 z-10 w-full justify-evenly items-center h-full bg-black-faded flex">
           <input ref={inputRef} type="file" />
 
           <p className="flex items-center text-white font-bold">
@@ -86,12 +89,9 @@ export default function Photos({ photos }) {
 
       {!photos || (photos.length === 0 && <p className="text-center text-2xl">No Posts Yet</p>)}
 
-      {isOpen && (
-        <div>
+        <Modal isOpen={isOpen} onClose={closeModal}>
           <p>This is the modal content</p>
-          <button onClick={closeModal}>Close Modal</button>
-        </div>
-      )}
+        </Modal>
     </div>
   );
 }
