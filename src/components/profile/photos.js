@@ -3,7 +3,7 @@
 /* eslint-disable react/button-has-type */
 /* eslint-disable no-nested-ternary */
 import PropTypes from 'prop-types';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 import useModal from '../../hooks/use-modal';
 import Modal from '../modal';
@@ -13,9 +13,13 @@ export default function Photos({ photos }) {
 
   const {isOpen, openModal, closeModal} = useModal();
 
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [imageUrl, setImageUrl] = useState(null);
+
 
   const handleAddPhoto = (event) => {
-    console.log(event.target.value);
+    setSelectedFile(event.target.files[0]);
+    setImageUrl(URL.createObjectURL(event.target.files[0]));
   };
 
   useEffect(() => {
@@ -91,6 +95,11 @@ export default function Photos({ photos }) {
 
         <Modal isOpen={isOpen} onClose={closeModal}>
           <p>This is the modal content</p>
+          {imageUrl && (<img src={imageUrl} alt="Selected file" style={{ maxWidth: '100%', marginBottom: '15px' }} />)}
+
+          <button className="block my-15 mx-auto p-4 bg-blue-medium font-bold text-sm rounded text-white">
+             Upload Image
+          </button>
         </Modal>
     </div>
   );
