@@ -1,11 +1,51 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable react/button-has-type */
 /* eslint-disable no-nested-ternary */
 import PropTypes from 'prop-types';
+import { useEffect, useRef, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
+import useModal from '../../hooks/use-modal';
+import Modal from '../modal';
 
 export default function Photos({ photos }) {
+  const inputRef = useRef(null);
+
+  const {isOpen, openModal, closeModal} = useModal();
+
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [imageUrl, setImageUrl] = useState(null);
+
+
+  const handleAddPhoto = (event) => {
+    setSelectedFile(event.target.files[0]);
+    setImageUrl(URL.createObjectURL(event.target.files[0]));
+  };
+
+  useEffect(() => {
+    const element = inputRef.current;
+
+    element.addEventListener('change', handleAddPhoto, false);    
+
+    return () => {
+      element.removeEventListener('change', handleAddPhoto, false);
+    }
+  });
+
   return (
     <div className="h-16 border-t border-gray-primary mt-12 pt-4">
       <div className="grid md:grid-cols-3 gap-8 mt-4 mb-12">
+      <div className="relative group">
+        <div onClick={openModal} className="absolute bottom-0 left-0 bg-gray-200 z-10 w-full justify-evenly items-center h-full bg-black-faded flex">
+          <input ref={inputRef} type="file" />
+
+          <p className="flex items-center text-white font-bold">
+            +
+          </p>
+        </div>
+      </div>
+
+
         {!photos
           ? new Array(12).fill(0).map((_, i) => <Skeleton key={i} width={320} height={400} />)
           : photos.length > 0
@@ -52,6 +92,15 @@ export default function Photos({ photos }) {
       </div>
 
       {!photos || (photos.length === 0 && <p className="text-center text-2xl">No Posts Yet</p>)}
+
+        <Modal isOpen={isOpen} onClose={closeModal}>
+          <p>This is the modal content</p>
+          {imageUrl && (<img src={imageUrl} alt="Selected file" style={{ maxWidth: '100%', marginBottom: '15px' }} />)}
+
+          <button className="block my-15 mx-auto p-4 bg-blue-medium font-bold text-sm rounded text-white">
+             Upload Image
+          </button>
+        </Modal>
     </div>
   );
 }
