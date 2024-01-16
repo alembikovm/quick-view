@@ -129,6 +129,14 @@ export async function getUserPhotosByUserId(userId) {
   return photos;
 }
 
+export async function postUserPhotosByUserId(userId, photo) {
+  const result = await firebase
+    .firestore()
+    .collection('photos')
+    .where('userId', '==', userId)
+    .post(userId, photo);
+}
+
 export async function isUserFollowingProfile(loggedInUserUsername, profileUserId) {
   const result = await firebase
     .firestore()

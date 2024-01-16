@@ -8,7 +8,23 @@ import Skeleton from 'react-loading-skeleton';
 import useModal from '../../hooks/use-modal';
 import Modal from '../modal';
 
-export default function Photos({ photos }) {
+const handleUploadFile = (file, username) => {
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('username', username); // добавляем имя пользователя в formData
+
+  fetch('/upload', {
+    method: 'POST',
+    body: formData
+  })
+  .then(response => {
+  })
+  .catch(error => {
+  });
+}
+
+
+export default function Photos({ photos, username }) {
   const inputRef = useRef(null);
 
   const {isOpen, openModal, closeModal} = useModal();
@@ -16,13 +32,14 @@ export default function Photos({ photos }) {
   const [selectedFile, setSelectedFile] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
 
-
   const handleAddPhoto = (event) => {
-    setSelectedFile(event.target.files[0]);
-    setImageUrl(URL.createObjectURL(event.target.files[0]));
+    const file = event.target.files[0];
+    setSelectedFile(file);
+
+    setImageUrl(URL.createObjectURL(file));
   };
 
-  useEffect(() => {
+useEffect(() => {
     const element = inputRef.current;
 
     element.addEventListener('change', handleAddPhoto, false);    
@@ -35,21 +52,21 @@ export default function Photos({ photos }) {
   return (
     <div className="h-16 border-t border-gray-primary mt-12 pt-4">
       <div className="grid md:grid-cols-3 gap-8 mt-4 mb-12">
-      <div className="relative group">
-        <div onClick={openModal} className="absolute bottom-0 left-0 bg-gray-200 z-10 w-full justify-evenly items-center h-full bg-black-faded flex">
+        <div className="relative group">
+          <div onClick={openModal} className="absolute bottom-0 left-0 bg-gray-200 z-10 w-full justify-evenly items-center h-full bg-black-faded flex">
           <input ref={inputRef} type="file" />
 
           <p className="flex items-center text-white font-bold">
             +
           </p>
         </div>
-      </div>
+        </div>
 
 
         {!photos
           ? new Array(12).fill(0).map((_, i) => <Skeleton key={i} width={320} height={400} />)
           : photos.length > 0
-          ? photos.map((photo) => (
+            ? photos.map((photo) => (
               <div key={photo.docId} className="relative group">
                 <img src={photo.imageSrc} alt={photo.caption} />
 
@@ -88,23 +105,23 @@ export default function Photos({ photos }) {
                 </div>
               </div>
             ))
-          : null}
+            : null}
       </div>
 
       {!photos || (photos.length === 0 && <p className="text-center text-2xl">No Posts Yet</p>)}
 
-        <Modal isOpen={isOpen} onClose={closeModal}>
-          <p>This is the modal content</p>
-          {imageUrl && (<img src={imageUrl} alt="Selected file" style={{ maxWidth: '100%', marginBottom: '15px' }} />)}
+      <Modal isOpen={isOpen} onClose={closeModal}>
+        {imageUrl && (<img src={imageUrl} alt="Selected file" style={{ maxWidth: '100%', marginBottom: '15px' }} />)}
 
-          <button className="block my-15 mx-auto p-4 bg-blue-medium font-bold text-sm rounded text-white">
-             Upload Image
-          </button>
-        </Modal>
+        <button onClick={() => handleUploadFile(selectedFile, username)} className="block my-15 mx-auto p-4 bg-blue-medium font-bold text-sm rounded text-white">
+          Upload Image
+        </button>
+      </Modal>
     </div>
   );
 }
 
 Photos.propTypes = {
-  photos: PropTypes.array
+  photos: PropTypes.array,
+  username: PropTypes.string
 };
